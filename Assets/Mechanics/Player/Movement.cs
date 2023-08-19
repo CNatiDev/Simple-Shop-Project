@@ -6,7 +6,7 @@ public class Movement : MonoBehaviour
     [SerializeField]private float Speed;// Player speed
     [SerializeField]private float RunSpeed;// Player speed
     private float OldSpeed;
-    private Vector3 OldScale;
+    private float ScaleX;
     private Rigidbody2D rb;
     private Vector2 moveDirection;
     private Animator Animator;
@@ -17,7 +17,7 @@ public class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
         OldSpeed = Speed;
-        OldScale = transform.localScale;
+        ScaleX = transform.localScale.x;
     }
     private void FixedUpdate()
     {
@@ -38,12 +38,12 @@ public class Movement : MonoBehaviour
         if (moveDirection.x > 0)
         {
             //transform.localRotation = Quaternion.Euler(0, 0, 0);
-            transform.localScale = OldScale;
+            transform.localScale = new Vector3(ScaleX, transform.localScale.y, transform.localScale.z);
         }
         else if (moveDirection.x < 0)
         {
             //transform.localRotation = Quaternion.Euler(0, 180, 0);
-            transform.localScale =new Vector3(-0.64f, transform.localScale.y, transform.localScale.z);
+            transform.localScale =new Vector3(-ScaleX, transform.localScale.y, transform.localScale.z);
         }
 
         // Check states
