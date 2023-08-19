@@ -6,7 +6,7 @@ public class InvokeEvent : MonoBehaviour
 {
     public UnityEvent Event;
     // Start is called before the first frame update
-    void CallEvent()
+    public void CallEvent()
     {
         Event.Invoke();
     }
