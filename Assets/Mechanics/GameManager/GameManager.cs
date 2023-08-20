@@ -27,7 +27,21 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         BudgetText.text = PlayeBudget.ToString();
+        SetResolution(1920, 1080);
     }
-    
+    public void SetResolution(int width, int height)
+    {
+        Resolution[] resolutions = Screen.resolutions;
+
+        foreach (Resolution res in resolutions)
+        {
+            if (res.width == width && res.height == height)
+            {
+                Screen.SetResolution(width, height, Screen.fullScreen);
+                break;
+            }
+        }
+    }
+
 
 }
