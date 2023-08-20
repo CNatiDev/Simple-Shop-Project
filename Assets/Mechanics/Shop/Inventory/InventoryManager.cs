@@ -18,6 +18,7 @@ public class InventoryManager : MonoBehaviour
     {
         _instance = this;
     }
+    [Tooltip("SpriteRenderer attached to the player, change their sprites when equipping an item.")]
     [Header("Body Items")]
     public SpriteRenderer Hood;
     public SpriteRenderer Torso;
@@ -29,22 +30,51 @@ public class InventoryManager : MonoBehaviour
     public SpriteRenderer Shoulder;
     public SpriteRenderer Pelvis;
 
+    [Tooltip("Items in the UI inventory are automatically updated with the sprites of the items in the scene that will be purchased")]
     [Header("Inventory Items")]
     public Image[] InventoryIcon;
-    int lastIcon = 0;
+
+    [HideInInspector] public int lastIcon = 0;
+    [HideInInspector] public bool IsFull = false; //Check if the inventory is full.
+
+    /// <summary>
+    /// The method is used to send the necessary information to the InventoryItem, including the sprite, sprite name, price, and to add the item to the inventory.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="itemName"></param>
+    /// <param name="itemPrice"></param>
     public void EquipInventory(Sprite item, string itemName, float itemPrice)
-    {
-        if (lastIcon + 1 <= InventoryIcon.Length)
+    {   //Checking if there's still space in the inventory to add a new item.
+        if (lastIcon + 1 <= InventoryIcon.Length&&!IsFull)
         {
-            InventoryIcon[lastIcon].sprite = item;
-            InventoryIcon[lastIcon].GetComponent<InventoryItem>().Item = item;
-            InventoryIcon[lastIcon].GetComponent<InventoryItem>().ItemName = itemName;
-            InventoryIcon[lastIcon].GetComponent<InventoryItem>().Price = itemPrice;
+            IsFull = false;
+        }
+        else
+        { 
+            IsFull = true;
+        }
+        if (!IsFull)
+        {
+            AddItem(item, itemName, itemPrice, lastIcon);
             lastIcon++;
         }
+        // If it's full, we check if the player has sold something, and if yes, we identify the available slots and load the sprite there.
+        if (IsFull&&lastIcon+1<=InventoryIcon.Length)
+        {
+            for (int i=0;i<InventoryIcon.LongLength;i++)
+            {
+                if (InventoryIcon[i].sprite == null)
+                {
+                    AddItem(item, itemName, itemPrice, i);
+                    break;
+                }
+            }
+        }
     }
+
+
     public void EquipPlayer(Sprite item, string itemName)
-    {
+    {   // Cecking the player's name in order to know which clothing they are equipping.
         switch (itemName)
         {
             case "hood":
@@ -84,5 +114,14 @@ public class InventoryManager : MonoBehaviour
                     Shoulder.sprite = item;
                 break;
         }
+    }
+
+    //Avoid violating the DRY (Don't Repeat Yourself) principle, we will create a method for adding items.
+    void AddItem(Sprite item, string itemName, float itemPrice, int index)
+    {
+        InventoryIcon[index].sprite = item;
+        InventoryIcon[index].GetComponent<InventoryItem>().Item = item;
+        InventoryIcon[index].GetComponent<InventoryItem>().ItemName = itemName;
+        InventoryIcon[index].GetComponent<InventoryItem>().Price = itemPrice;
     }
 }

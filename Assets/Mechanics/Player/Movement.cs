@@ -5,16 +5,17 @@ public class Movement : MonoBehaviour
 {   
     [SerializeField]private float Speed;// Player speed
     [SerializeField]private float RunSpeed;// Player speed
-    private float OldSpeed;
-    private float ScaleX;
-    private Rigidbody2D rb;
-    private Vector2 moveDirection;
-    private Animator Animator;
-    private bool isMoving = false;
-    private bool isRunnimg = false;
+    private float OldSpeed; // Store the old speed to be able to update it after the sprint ends.
+    private float ScaleX; // Use it to rotate the character correctly towards the left or right axis when the player moves.
+    private Rigidbody2D PlayerRigidbody; // Player Rigidbody
+    private Vector2 moveDirection; // Store the desired movement direction in a two-dimensional space horizontally or vertically.
+    private Animator Animator; // Player Animator
+    private bool isMoving = false; // Movement status
+    private bool isRunnimg = false; // Running status
+
     private void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
+    {   // Initialization
+        PlayerRigidbody = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
         OldSpeed = Speed;
         ScaleX = transform.localScale.x;
@@ -32,7 +33,7 @@ public class Movement : MonoBehaviour
         moveDirection.y = Input.GetAxis("Vertical");
 
         // Move the game object's Rigidbody component in a physics-friendly way.
-        rb.MovePosition(rb.position + moveDirection.normalized * Speed * Time.fixedDeltaTime);
+        PlayerRigidbody.MovePosition(PlayerRigidbody.position + moveDirection.normalized * Speed * Time.fixedDeltaTime);
 
         // Check if it goes left or right and rotate the sprite to be on the correct side.
         if (moveDirection.x > 0)

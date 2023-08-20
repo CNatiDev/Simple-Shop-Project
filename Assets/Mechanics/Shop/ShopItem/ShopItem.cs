@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class ShopItem : MonoBehaviour,IShopItem
 {
-    public float ItemPrice;
+    public float ItemPrice; // The price of the item.
     private Sprite ItemSprite;
-    private GameObject OfferCanavas;
+    private GameObject OfferCanavas; //The offer canvas that will be spawned from the GameManager, assigned as OfferCanvas.
     public string Name;
+
+
+    /// <summary>
+    /// Initialization and spawning of the offer, assigning the camera, and setting the canvas to be initially false to make it visible only when the player enters the item's trigger.
+    /// </summary>
     private void Start()
     {
         ItemSprite = GetComponent<SpriteRenderer>().sprite;
@@ -16,6 +21,9 @@ public class ShopItem : MonoBehaviour,IShopItem
         OfferCanavas.SetActive(false);
         CheckPrice();
     }
+    /// <summary>
+    /// In the Buy function, we will check the budget, and if it's greater than or equal to the price, we will equip the inventory and update the budget.
+    /// </summary>
     public void Buy()
     {
         
@@ -44,9 +52,12 @@ public class ShopItem : MonoBehaviour,IShopItem
         DisplayOffer(false);
     }
     public void CheckPrice()
-    {
+    {// We check if there is enough budget to make the purchase, and if not, we will set the UI buy button's interactability to false.
         if (GameManager.Instance.PlayeBudget < ItemPrice)
             OfferCanavas.GetComponent<OfferManager>().BuyButton.interactable = false;
+        else
+            OfferCanavas.GetComponent<OfferManager>().BuyButton.interactable = true;
+
     }
 
 

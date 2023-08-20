@@ -5,7 +5,7 @@ using UnityEngine.AI;
 public class Shopkeeper : MonoBehaviour
 {
     NavMeshAgent agent;
-    public Transform[] Patrol_Points;
+    public Transform[] Patrol_Points;//The points to which the agent will patrol.
     private int currentPatrolPointIndex = 0;
     private void Start()
     {
