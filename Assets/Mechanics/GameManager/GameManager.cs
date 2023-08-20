@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject MainPlayer;
     public float PlayeBudget;
     public TextMeshProUGUI BudgetText;
+    public GameObject UiOfferPrefab;
     private void Start()
     {
         BudgetText.text = PlayeBudget.ToString();

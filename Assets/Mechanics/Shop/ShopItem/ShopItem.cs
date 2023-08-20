@@ -8,11 +8,10 @@ public class ShopItem : MonoBehaviour,IShopItem
     private Sprite ItemSprite;
     private GameObject OfferCanavas;
     public string Name;
-    public GameObject UiPrefab; 
     private void Start()
     {
         ItemSprite = GetComponent<SpriteRenderer>().sprite;
-        OfferCanavas = Instantiate(UiPrefab, transform.position, Quaternion.identity,transform);
+        OfferCanavas = Instantiate(GameManager.Instance.UiOfferPrefab, transform.position, Quaternion.identity,transform);
         OfferCanavas.GetComponent<Canvas>().worldCamera = Camera.main;
         OfferCanavas.SetActive(false);
         CheckPrice();
@@ -22,7 +21,7 @@ public class ShopItem : MonoBehaviour,IShopItem
         
         if (GameManager.Instance.PlayeBudget >= ItemPrice)
         { 
-            GameManager.Instance.MainPlayer.GetComponent<PlayerInventory>().Equip(ItemSprite, Name);
+            InventoryManager.Instance.EquipInventory(ItemSprite, Name, ItemPrice);
             GameManager.Instance.PlayeBudget -= ItemPrice;
             GameManager.Instance.BudgetText.text = GameManager.Instance.PlayeBudget.ToString();
             CheckPrice();
